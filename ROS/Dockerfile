@@ -10,6 +10,8 @@ ENV NVIDIA_DRIVER_CAPABILITIES \
 ENV DEBIAN_FRONTEND=noninteractive 
 ARG DEBIAN_FRONTEND=noninteractive
 
+
+# set locales + etc
 RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
 RUN apt-get install -y wget sudo curl gnupg2 lsb-release locales
 
@@ -21,7 +23,15 @@ ENV LC_ALL en_US.UTF-8
 ENV TZ=Asia/Seoul
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# rosdep는 ROOT권한으로 실행하는걸 권장하지 않는다
+# set X11 related
+RUN apt-get update &&  apt-get install -y -qq --no-install-recommends \
+    libgl1 \
+    libxext6 \ 
+    libx11-6 \
+   && rm -rf /var/lib/apt/lists/*
+
+
+# Add user
 ARG UNAME="noetic"
 ARG UID=1000
 ARG GID=1000
@@ -33,19 +43,21 @@ RUN mkdir -p /etc/sudoers.d && \
 
 USER ${UNAME}
 WORKDIR $HOME
+COPY keyboard /etc/default/keyboard
 
+# Install ROS
 RUN sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
 
 RUN sudo apt-get update 
-RUN DEBIAN_FRONTEND=noninteractive && sudo apt-get install -y ros-noetic-desktop
+RUN DEBIAN_FRONTEND=noninteractive sudo apt-get install -y ros-noetic-desktop
 
-RUN DEBIAN_FRONTEND=noninteractive && sudo apt-get install -y python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential \
+RUN DEBIAN_FRONTEND=noninteractive sudo apt-get install -y python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential \
     libusb-dev libspnav-dev libbluetooth-dev libcwiid-dev libncurses5-dev \
     libgl1-mesa-glx libgl1-mesa-dri mesa-utils \
     qt5-default  x11-apps \
     tmux vim \
-    unzip locales ntp whois tree \
+    unzip ntp whois tree \
     python3-pip python3-tk python3-rosdep 
     # python-pip \
 

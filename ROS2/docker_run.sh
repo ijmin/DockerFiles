@@ -13,6 +13,6 @@ docker run -it -d --name noetic \
     -e QT_X11_NO_MITSHM=1 \
     -e DISPLAY=$DISPLAY \
     -v $HOME/Docker/ROS/ros1_ws:/home/noetic/catkin_ws/src \
-    ijmin/ros:noetic0.0
+    ijmin/ros:foxy0.0
     
     # -e NVIDIA_VISIBLE_DEVICES=all \
