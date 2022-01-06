@@ -6,8 +6,6 @@ ENV NVIDIA_VISIBLE_DEVICES \
 ENV NVIDIA_DRIVER_CAPABILITIES \
     ${NVIDIA_DRIVER_CAPABILITIES:+$NVIDIA_DRIVER_CAPABILITIES,}graphics
 
-
-ENV DEBIAN_FRONTEND=noninteractive 
 ARG DEBIAN_FRONTEND=noninteractive
 
 
@@ -30,6 +28,14 @@ RUN apt-get update &&  apt-get install -y -qq --no-install-recommends \
     libx11-6 \
    && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && apt-get install -y \
+  build-essential \
+  cmake \
+  git \
+  python3-pip \
+  python3-rosdep \
+  python3-apt
+
 
 # Add user
 ARG UNAME="noetic"
@@ -49,8 +55,9 @@ COPY keyboard /etc/default/keyboard
 RUN sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
 
+ARG DEBIAN_FRONTEND=noninteractive
 RUN sudo apt-get update 
-RUN DEBIAN_FRONTEND=noninteractive sudo apt-get install -y ros-noetic-desktop
+RUN DEBIAN_FRONTEND=noninteractive && sudo apt-get install -y ros-noetic-desktop
 
 RUN DEBIAN_FRONTEND=noninteractive sudo apt-get install -y python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential \
     libusb-dev libspnav-dev libbluetooth-dev libcwiid-dev libncurses5-dev \
@@ -63,14 +70,14 @@ RUN DEBIAN_FRONTEND=noninteractive sudo apt-get install -y python3-rosdep python
 
 # clean up
 RUN sudo apt-get autoremove --purge --yes \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /etc/ros/rosdep/sources.list.d/20-default.list
+    && sudo rm -rf /var/lib/apt/lists/* \
+    && sudo rm -rf /etc/ros/rosdep/sources.list.d/20-default.list
 
 # ROS관련 DEPENDENCIES & LIBRAIES 설치
-RUN rosdep init
+RUN sudo rosdep init
 
 # 생성된 USER 계정으로 실행
-RUN sudo rosdep fix-permissions 
+# RUN sudo rosdep fix-permissions 
 
 RUN rosdep update
 

@@ -35,7 +35,7 @@ docker run -it -d --name foxy \
     -e QT_X11_NO_MITSHM=1 \
     -e DISPLAY=$DISPLAY \
     -v $HOME/Docker/ROS/ros2_ws:/home/foxy/colcon_ws/src \
-    ijmin/ros:foxy0.0
+    ijmin/ros:foxy_0
 ```
 2. After 
 ```shell

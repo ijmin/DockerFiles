@@ -5,14 +5,14 @@
 xhost +local:root
 # xhost +$ip
 
-docker run -it -d --name noetic \
+docker run -it -d --name foxy \
     --gpus all \
     --privileged \
     --net=host \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     -e QT_X11_NO_MITSHM=1 \
     -e DISPLAY=$DISPLAY \
-    -v $HOME/Docker/ROS/ros1_ws:/home/noetic/catkin_ws/src \
-    ijmin/ros:foxy0.0
+    -v $HOME/Docker/ROS/ros2_ws:/home/foxy/catkin_ws/src \
+    ijmin/ros:foxy
     
     # -e NVIDIA_VISIBLE_DEVICES=all \

@@ -6,8 +6,7 @@ ENV NVIDIA_VISIBLE_DEVICES \
 ENV NVIDIA_DRIVER_CAPABILITIES \
     ${NVIDIA_DRIVER_CAPABILITIES:+$NVIDIA_DRIVER_CAPABILITIES,}graphics
 
-
-ENV DEBIAN_FRONTEND=noninteractive 
+ 
 ARG DEBIAN_FRONTEND=noninteractive
 
 
@@ -40,41 +39,42 @@ RUN sh -c 'echo "deb [arch=$(dpkg --print-architecture)] http://packages.ros.org
 # RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key  -o /usr/share/keyrings/ros-archive-keyring.gpg
 # RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
 
-# RUN apt-get update && apt-get install -y \
-#   build-essential \
-#   cmake \
-#   git \
-#   libbullet-dev \
-#   python3-colcon-common-extensions \
-#   python3-flake8 \
-#   python3-pip \
-#   python3-pytest-cov \
-#   python3-rosdep \
-#   python3-setuptools \
-#   python3-vcstool \
-#   wget
+RUN apt-get update && apt-get install -y \
+  build-essential \
+  cmake \
+  git \
+  libbullet-dev \
+  python3-colcon-common-extensions \
+  python3-flake8 \
+  python3-pip \
+  python3-pytest-cov \
+  python3-rosdep \
+  python3-setuptools \
+  python3-vcstool \
+  wget
 
-# # install some pip packages needed for testing
-# RUN python3 -m pip install -U \
-#   argcomplete \
-#   flake8-blind-except \
-#   flake8-builtins \
-#   flake8-class-newline \
-#   flake8-comprehensions \
-#   flake8-deprecated \
-#   flake8-docstrings \
-#   flake8-import-order \
-#   flake8-quotes \
-#   pytest-repeat \
-#   pytest-rerunfailures \
-#   pytest
-# # install Fast-RTPS dependencies
-# RUN apt-get install --no-install-recommends -y \
-#   libasio-dev \
-#   libtinyxml2-dev
-# # install Cyclone DDS dependencies
-# RUN apt-get install --no-install-recommends -y \
-#   libcunit1-dev
+# install some pip packages needed for testing
+RUN python3 -m pip install -U \
+  argcomplete \
+  flake8-blind-except \
+  flake8-builtins \
+  flake8-class-newline \
+  flake8-comprehensions \
+  flake8-deprecated \
+  flake8-docstrings \
+  flake8-import-order \
+  flake8-quotes \
+  pytest-repeat \
+  pytest-rerunfailures \
+  pytest
+# install Fast-RTPS dependencies
+RUN apt-get install --no-install-recommends -y \
+  libasio-dev \
+  libtinyxml2-dev
+# install Cyclone DDS dependencies
+RUN apt-get install --no-install-recommends -y \
+  libcunit1-dev
+
 
 # Add user
 ARG UNAME="foxy"
@@ -90,8 +90,11 @@ USER ${UNAME}
 WORKDIR $HOME
 
 
+COPY keyboard /etc/default/keyboard
+
+ARG DEBIAN_FRONTEND=noninteractive
 RUN sudo apt-get update 
-RUN DEBIAN_FRONTEND=noninteractive sudo apt-get install -y ros-foxy-desktop
+RUN DEBIAN_FRONTEND=noninteractive && sudo apt-get install -y ros-foxy-desktop
 
 RUN sudo apt-get install -y python3-pip
 RUN pip3 install -U argcomplete
@@ -108,26 +111,49 @@ RUN sudo apt-get install -y ~nros-foxy-rqt*
 
 # clean up
 RUN sudo apt-get autoremove --purge --yes \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /etc/ros/rosdep/sources.list.d/20-default.list
+    && sudo rm -rf /var/lib/apt/lists/* \
+    && sudo rm -rf /etc/ros/rosdep/sources.list.d/20-default.list
 
 RUN sudo apt-get update
 
+RUN DEBIAN_FRONTEND=noninteractive sudo apt-get install -y python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential \
+    libusb-dev libspnav-dev libbluetooth-dev libcwiid-dev libncurses5-dev \
+    libgl1-mesa-glx libgl1-mesa-dri mesa-utils \
+    qt5-default  x11-apps \
+    tmux vim \
+    unzip ntp whois tree \
+    python3-pip python3-tk python3-rosdep 
+
+# ROS관련 DEPENDENCIES & LIBRAIES 설치
+RUN sudo rosdep init
+RUN rosdep update
+
 # init colcon_ws workspace
+RUN cd $HOME
 RUN mkdir -p $HOME/dep_ws/src
-RUN cd $HOME/dep_ws
-RUN rosdep install -i --from-path src --rosdistro foxy -y
+RUN rosdep install -i --from-path $HOME/dep_ws/src --rosdistro foxy -y
 
 RUN cd $HOME
 RUN mkdir -p $HOME/colcon_ws/src
 RUN /bin/bash -c "source /opt/ros/foxy/setup.bash; cd ~/colcon_ws/;colcon build --symlink-install"
 
+RUN echo "alias eb='vi ~/.bashrc'" >> $HOME/.bashrc
+RUN echo "alias sb='source ~/.bashrc'" >> $HOME/.bashrc
 
 RUN echo "source /opt/ros/foxy/setup.bash" >> $HOME/.bashrc
 RUN echo "export ROS_DOMAIN_ID=0" >> $HOME/.bashrc
 RUN echo "" >> $HOME/.bashrc
 RUN echo "alias cs='cd ~/colcon_ws/src'" >> $HOME/.bashrc
 RUN echo "alias cm='cd ~/colcon_ws/ && colcon build --symlink-install'" >> $HOME/.bashrc
-RUN echo "alias eb='vi ~/.bashrc'" >> $HOME/.bashrc
-RUN echo "alias sb='source ~/.bashrc'" >> $HOME/.bashrc
+RUN echo "" >> $HOME/.bashrc
+RUN echo "alias csf='source /opt/ros/foxy/setup.bash'" >> $HOME/.bashrc
+RUN echo "alias csi='source ~/colcon_ws/install/setup.bash'" >> $HOME/.bashrc
+RUN echo "" >> $HOME/.bashrc
+RUN echo "alias ci='cd ~/colcon_ws/ && source /opt/ros/foxy/setup.bash && . install/setup.bash'" >> $HOME/.bashrc
+RUN echo "alias cil='cd ~/colcon_ws/ && source /opt/ros/foxy/setup.bash && . install/local_setup.bash'" >> $HOME/.bashrc
+RUN echo "" >> $HOME/.bashrc
 RUN echo "alias killgazebo='killall -9 gazebo & killall -9 gzserver  & killall -9 gzclient'" >> $HOME/.bashrc
+RUN echo "" >> $HOME/.bashrc
+
+
+COPY bashfunc.txt $HOME/bashfunc.txt

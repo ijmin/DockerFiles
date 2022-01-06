@@ -1,0 +1,32 @@
+
+function r2() {
+  WS=~/colcon_ws
+
+  source /opt/ros/foxy/setup.bash
+  source /usr/share/colcon_cd/function/colcon_cd.sh
+  export _colcon_cd_root=$RSColconRoot
+
+  alias cw='cd ${WS}'
+  alias cs='cd ${WS}/src'
+  alias rp='colcon list'
+
+  alias cis='source ${WS}/install/setup.bash'
+
+  ###gnome-terminal --tab
+  function cm() {
+	  if [ "$1" ]; then
+      terminator --working-directory=${WS} --command="source /opt/ros/foxy/setup.bash;colcon build --packages-select $1;$SHELL;"
+    else
+      terminator --working-directory=${WS} --command="source /opt/ros/foxy/setup.bash;colcon build;$SHELL;"
+	  fi
+  }
+
+  #alias cm='terminator --working-directory='$WS' --command="source /opt/ros/foxy/setup.bash;colcon build;$SHELL;"'
+
+  alias ci='terminator --working-directory='$WS' --command="source /opt/ros/foxy/setup.bash;. install/setup.bash;$SHELL;"'
+
+  alias cil='terminator --working-directory='$WS' --command="source /opt/ros/foxy/setup.bash;. install/local_setup.bash;$SHELL;"'
+
+  export ROS_DOMAIN_ID=$1
+  printenv | grep -i ROS
+}
