@@ -14,4 +14,5 @@ docker run -it -d --name rpi \
     -v $HOME/Docker/RPI4b/ros_ws:/home/noetic/catkin_ws/src \
     ijmin/rpi:4b_ros_0
     
-    # -e NVIDIA_VISIBLE_DEVICES=all \
+
+#docker run --rm -it --name rpi rpi:4b_ros /bin/bash

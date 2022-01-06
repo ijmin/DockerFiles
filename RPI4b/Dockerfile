@@ -27,6 +27,8 @@ RUN apt-get autoremove --purge --yes \
 RUN rosdep init
 RUN apt-get update 
 
+# ARG ARCH=aarch64
+# COPY --from=qemu /usr/bin/qemu-${ARCH}-static /usr/bin
 
 # Add user
 ARG UNAME="rpi"
@@ -36,7 +38,7 @@ ARG HOME=/home/${UNAME}
 RUN useradd -rm -d ${HOME} -s /bin/bash -g root -G sudo,audio,video,plugdev -u ${UID} ${UNAME}
 RUN mkdir -p /etc/sudoers.d && \
     echo "${UNAME} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${UNAME} && \
-    chmod 0440 /etc/sudoers.d/${UNAME}
+    chmod 0440 /etc/sudoers.d/${UNAME} 
 
 USER ${UNAME}
 WORKDIR $HOME
