@@ -28,14 +28,16 @@ RUN apt-get update &&  apt-get install -y -qq --no-install-recommends \
     libx11-6 \
    && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && apt-get install -y \
-  build-essential \
-  cmake \
-  git \
-  python3-pip \
-  python3-rosdep \
-  python3-apt
+# RUN apt-get update && apt-get install -y \
+#   build-essential \
+#   cmake \
+#   git \
+#   python3-pip \
+#   python3-rosdep \
+#   python3-apt
 
+RUN DEBIAN_FRONTEND=noninteractive && apt-get update && apt-get install -y \
+   keyboard-configuration 
 
 # Add user
 ARG UNAME="noetic"
@@ -50,6 +52,7 @@ RUN mkdir -p /etc/sudoers.d && \
 USER ${UNAME}
 WORKDIR $HOME
 COPY keyboard /etc/default/keyboard
+
 
 # Install ROS
 RUN sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
