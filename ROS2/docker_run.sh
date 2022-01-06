@@ -13,6 +13,6 @@ docker run -it -d --name foxy \
     -e QT_X11_NO_MITSHM=1 \
     -e DISPLAY=$DISPLAY \
     -v $HOME/Docker/ROS2/ros2_ws:/home/foxy/colcon_ws/src \
-    ijmin/ros:foxy
+    ijmin/ros:foxy_0
     
     # -e NVIDIA_VISIBLE_DEVICES=all \

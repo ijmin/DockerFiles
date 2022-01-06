@@ -18,6 +18,6 @@ docker run -it -d --name playonlinux \
     -e "GTK_IM_MODULE=ibus" \
     -e "XMODIFIERS=@im=ibus" \
     -e "QT_IM_MODULE=ibus" \
-    ijmin/pol:kakaotalk20.0
+    ijmin/pol:kakaotalk0
 
     # -e NVIDIA_VISIBLE_DEVICES=all \
