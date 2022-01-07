@@ -16,3 +16,4 @@ docker run -it -d --name stm \
     ijmin/stm32cube:0.0
     
 # ttyACM
+# docker exec -it stm /opt/st/stm32cubeide_1.8.0/stm32cubeide

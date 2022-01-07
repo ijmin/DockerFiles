@@ -44,4 +44,4 @@ COPY test.zip /home/$UNAME/test.zip
 
 
 
-CMD /bin/bash
+CMD /opt/st/stm32cubeide_1.8.0/stm32cubeide

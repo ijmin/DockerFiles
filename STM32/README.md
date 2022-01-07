@@ -1,5 +1,5 @@
 #  STM32 Docker
-* only for devel environment! not installed 
+* only for devel environment! cudeide not installed on image 
 ubuntu20.04 + cuda11.4.2(nvidia) 
 
 
@@ -37,11 +37,11 @@ docker run -it -d --name stm \
     -e QT_X11_NO_MITSHM=1 \
     -e DISPLAY=$DISPLAY \
     -v $HOME/Docker/STM32/workspace:/home/stm \
-    ijmin/stm32cube:0.0
+    ijmin/stm32cube:ide_1.8.0
 ```
 2. After 
 ```shell
-docker start stm
+docker exec -it stm /opt/st/stm32cubeide_1.8.0/stm32cubeide
 ```
 
 ## Postrequisities
