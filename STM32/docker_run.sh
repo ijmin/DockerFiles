@@ -17,3 +17,4 @@ docker run -it -d --name stm \
     
 # ttyACM
 # docker exec -it stm /opt/st/stm32cubeide_1.8.0/stm32cubeide
+# docker exec -it stm stm32cubemonitor
