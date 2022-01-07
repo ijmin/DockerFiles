@@ -1,6 +1,7 @@
 #  STM32 Docker
 * only for devel environment! cudeide not installed on image 
-ubuntu20.04 + cuda11.4.2(nvidia) 
+
+- ubuntu20.04 + cuda11.4.2(nvidia) 
 
 
 ### Prerequisities
