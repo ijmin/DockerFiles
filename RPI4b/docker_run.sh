@@ -11,7 +11,7 @@ docker run -it -d --name rpi \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     -e QT_X11_NO_MITSHM=1 \
     -e DISPLAY=$DISPLAY \
-    -v $HOME/Docker/RPI4b/ros_ws:/home/rpi/catkin_ws/src \
+    -v $HOME/Docker/DockerVolumes/RPI4b:/home/rpi \
     ijmin/rpi:rosnoetic_0
     
 

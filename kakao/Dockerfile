@@ -71,6 +71,6 @@ RUN useradd --create-home -m $USER && \
 USER $USER
 ENV HOME /home/$USER
 
-COPY KakaoTalk_Setup.exe /home/$USER/KakaoTalk_Setup.exe
+# COPY KakaoTalk_Setup.exe /home/$USER/KakaoTalk_Setup.exe
 
 CMD playonlinux

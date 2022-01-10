@@ -32,7 +32,9 @@ WORKDIR $HOME
 #st-stm32cubeide_1.8.0_11526_20211125_0815_amd64.deb_bundle.sh
 
 RUN sudo apt-get update -y
-COPY test.zip /home/$UNAME/test.zip
+RUN mkdir STM32CubeIDE
+RUN mkdir STM32CubeMonitor
+# COPY test.zip /home/$UNAME/test.zip
 # COPY en.st-stm32cubeide_1.8.0_11526_20211125_0815_amd64.deb_bundle.sh_v1.8.0.zip  ${HOME}/en.st-stm32cubeide_1.8.0_11526_20211125_0815_amd64.deb_bundle.sh_v1.8.0.zip
 # RUN unzip en.st-stm32cubeide_1.8.0_11526_20211125_0815_amd64.deb_bundle.sh_v1.8.0.zip
 # RUN chmod 755 st-stm32cubeide_1.8.0_11526_20211125_0815_amd64.deb_bundle.sh
@@ -43,5 +45,8 @@ COPY test.zip /home/$UNAME/test.zip
 # RUN sudo sh ./st-stm32cubeide_1.8.0_11526_20211125_0815_amd64.deb_bundle.sh --quiet  --noprogress --nox11 
 
 
+RUN echo "" >> $HOME/.bashrc
+RUN echo "alias ide='/opt/st/stm32cubeide_1.8.0/stm32cubeide'" >> $HOME/.bashrc
+RUN echo "alias mtr='stm32cubemonitor'" >> $HOME/.bashrc
 
-CMD /opt/st/stm32cubeide_1.8.0/stm32cubeide
+# CMD /opt/st/stm32cubeide_1.8.0/stm32cubeide

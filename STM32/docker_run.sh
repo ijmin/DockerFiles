@@ -12,7 +12,8 @@ docker run -it -d --name stm \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     -e QT_X11_NO_MITSHM=1 \
     -e DISPLAY=$DISPLAY \
-    -v $HOME/Docker/STM32/workspace:/home/stm \
+    -v $HOME/Docker/DockerVolumes/STM32/STM32CubeIDE:/home/stm/STM32CubeIDE \
+    -v $HOME/Docker/DockerVolumes/STM32/STM32CubeMonitor:/home/stm/STM32CubeMonitor \
     ijmin/stm32cube:ide_1.8.0
     
 # ttyACM

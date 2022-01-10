@@ -10,7 +10,7 @@ docker run -it -d --name playonlinux \
     --net=host \
     --privileged \
     --gpus all \
-    -v $HOME/Docker/kakao/downs:/home/kakao/카카오톡\ 받은\ 파일 \
+    -v $HOME/Docker/DockerVolumes/kakao:/home/kakao/카카오톡\ 받은\ 파일 \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     -v /dev/shm:/dev/shm \
     -e DISPLAY=$DISPLAY \
